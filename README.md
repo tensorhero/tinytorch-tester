@@ -47,9 +47,25 @@ docker build -t my-tester .
 
 ## Stages
 
-| Stage | Slug           | Description                                                                |
-| ----- | -------------- | -------------------------------------------------------------------------- |
-| E01   | `tensor-class` | Tensor class with factory methods, operations, and dormant gradient fields |
+| Stage | Slug                        | Name                    |
+| ----- | --------------------------- | ----------------------- |
+| E01   | `tensor-class`              | Tensor Class            |
+| E02   | `computation-graph`         | Computation Graph       |
+| E03   | `backpropagation`           | Backpropagation         |
+| E04   | `more-backward-ops`         | More Backward Ops       |
+| E05   | `activations`               | Activations             |
+| E06   | `linear-layer`              | Linear Layer            |
+| E07   | `loss-functions`            | Loss Functions          |
+| E08   | `optimizers`                | Optimizers              |
+| E09   | `training-loop`             | Training Loop           |
+| E10   | `dataloader-and-mlp`        | DataLoader & MLP        |
+| E11   | `tokenization`              | Tokenization            |
+| E12   | `embeddings`                | Embeddings              |
+| E13   | `attention`                 | Attention               |
+| E14   | `transformer-block`         | Transformer Block       |
+| E15   | `gpt-and-generate`          | GPT & Generate          |
+| E16   | `quantization-and-kv-cache` | Quantization & KV Cache |
+| E17   | `profiling-and-compression` | Profiling & Compression |
 
 ## License
 
