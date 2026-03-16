@@ -1,0 +1,36 @@
+# Git files
+.git
+.gitignore
+.gitattributes
+
+# Build artifacts
+tinytorch-tester
+*.test
+*.out
+*.exe
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*.go
+*_test_temp.go
+
+# Documentation
+README.md
+docs/
+*.md
+
+# CI/CD
+.github/
+
+# Local development
+scripts/test-all-solutions.sh
