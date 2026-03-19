@@ -25,13 +25,6 @@ STAGES=(
     "optimizers"
     "training-loop"
     "dataloader-and-mlp"
-    "tokenization"
-    "embeddings"
-    "attention"
-    "transformer-block"
-    "gpt-and-generate"
-    "quantization-and-kv-cache"
-    "profiling-and-compression"
 )
 
 # 语言列表

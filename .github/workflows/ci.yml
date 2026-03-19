@@ -73,11 +73,9 @@ jobs:
         run: |
           cd solution
           STAGES=(
-            tensor-class computation-graph backpropagation more-backward-ops
-            activations linear-layer loss-functions optimizers
-            training-loop dataloader-and-mlp embeddings tokenization
-            attention transformer-block gpt-and-generate quantization-and-kv-cache
-            profiling-and-compression
+            tensor-class activations linear-layer loss-functions
+            computation-graph more-backward-ops backpropagation
+            optimizers training-loop dataloader-and-mlp
           )
           LANGUAGES=(java python)
 

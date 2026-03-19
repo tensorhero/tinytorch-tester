@@ -21,15 +21,6 @@ func GetDefinition() tester_definition.TesterDefinition {
 			e08OptimizersTestCase(),
 			e09TrainingLoopTestCase(),
 			e10DataLoaderAndMLPTestCase(),
-			// Phase 4: Transformer
-			e11TokenizationTestCase(),
-			e12EmbeddingsTestCase(),
-			e13AttentionTestCase(),
-			e14TransformerBlockTestCase(),
-			e15GptAndGenerateTestCase(),
-			// Phase 5: Optimization
-			e16QuantizationAndKVCacheTestCase(),
-			e17ProfilingAndCompressionTestCase(),
 		},
 	}
 }
@@ -76,17 +67,6 @@ func javaRule(testDriver string) tester_definition.LanguageRule {
 			"src/main/java/dev/tensorhero/tinytorch/AdamW.java",
 			"src/main/java/dev/tensorhero/tinytorch/Trainer.java",
 			"src/main/java/dev/tensorhero/tinytorch/DataLoader.java",
-			"src/main/java/dev/tensorhero/tinytorch/Tokenizer.java",
-			"src/main/java/dev/tensorhero/tinytorch/Embedding.java",
-			"src/main/java/dev/tensorhero/tinytorch/EmbeddingBackward.java",
-			"src/main/java/dev/tensorhero/tinytorch/PositionalEncoding.java",
-			"src/main/java/dev/tensorhero/tinytorch/Attention.java",
-			"src/main/java/dev/tensorhero/tinytorch/TransformerBlock.java",
-			"src/main/java/dev/tensorhero/tinytorch/GPT.java",
-			"src/main/java/dev/tensorhero/tinytorch/Quantizer.java",
-			"src/main/java/dev/tensorhero/tinytorch/KVCache.java",
-			"src/main/java/dev/tensorhero/tinytorch/Profiler.java",
-			"src/main/java/dev/tensorhero/tinytorch/Pruner.java",
 			"tests/" + testDriver + ".java",
 		},
 		RunCmd:  "java",
