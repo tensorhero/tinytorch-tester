@@ -62,16 +62,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Checkout solution repository
+      - name: Checkout solution (java branch)
         uses: actions/checkout@v4
         with:
           repository: tensorhero/tinytorch-solution
+          ref: java
           token: ${{ secrets.SOLUTION_REPO_PAT }}
-          path: solution
+          path: solution-java
+
+      - name: Checkout solution (python branch)
+        uses: actions/checkout@v4
+        with:
+          repository: tensorhero/tinytorch-solution
+          ref: python
+          token: ${{ secrets.SOLUTION_REPO_PAT }}
+          path: solution-python
 
       - name: Run regression tests
         run: |
-          cd solution
           STAGES=(
             tensor-class activations linear-layer loss-functions
             computation-graph more-backward-ops backpropagation
@@ -84,9 +92,12 @@ jobs:
           for lang in "${LANGUAGES[@]}"; do
             for stage in "${STAGES[@]}"; do
               TOTAL=$((TOTAL + 1))
+              find "$(pwd)/solution-${lang}" -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
               echo "Testing ${stage} (${lang})..."
-              if docker run --rm --user $(id -u):$(id -g) -v "$(pwd):/workspace" ghcr.io/tensorhero/tinytorch-tester:test \
-                -s "$stage" -d "/workspace/$lang"; then
+              if docker run --rm --user $(id -u):$(id -g) \
+                -v "$(pwd)/solution-${lang}:/workspace" \
+                ghcr.io/tensorhero/tinytorch-tester:test \
+                -s "$stage" -d /workspace; then
                 echo "✓ ${stage} (${lang}) passed"
               else
                 echo "✗ ${stage} (${lang}) failed"

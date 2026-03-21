@@ -1,6 +1,9 @@
 #!/bin/bash
 # 批量测试所有 stage 的 solution（Java + Python）
 # 用法: ./scripts/test-all-solutions.sh
+#
+# 分支模型：solution 仓库每种语言一个分支（java / python），
+# 脚本通过 git worktree 将各分支 checkout 到临时目录中测试。
 
 set -e
 
@@ -44,22 +47,35 @@ for lang in "${LANGUAGES[@]}"; do
     echo "--- Language: ${lang} ---"
     echo ""
 
-    sol_dir="${SOLUTION_DIR}/${lang}"
+    # 使用 git worktree 将语言分支 checkout 到临时目录
+    worktree_dir="${SOLUTION_DIR}/.worktree-${lang}"
+    if [ -d "$worktree_dir" ]; then
+        git -C "$SOLUTION_DIR" worktree remove --force "$worktree_dir" 2>/dev/null || rm -rf "$worktree_dir"
+    fi
+    git -C "$SOLUTION_DIR" worktree add "$worktree_dir" "$lang" 2>/dev/null
+
+    sol_dir="$worktree_dir"
 
     if [ ! -d "$sol_dir" ]; then
-        echo "⏭️  [${lang}] SKIPPED - solution directory not found"
+        echo "⏭️  [${lang}] SKIPPED - branch not found"
         ((SKIPPED += ${#STAGES[@]}))
         echo ""
         continue
     fi
 
-    # Ensure test drivers are present in solution dir
+    # Ensure test drivers are present in solution dir (copy from starter branch)
+    starter_worktree="${STARTER_DIR}/.worktree-${lang}"
+    if [ -d "$starter_worktree" ]; then
+        git -C "$STARTER_DIR" worktree remove --force "$starter_worktree" 2>/dev/null || rm -rf "$starter_worktree"
+    fi
+    git -C "$STARTER_DIR" worktree add "$starter_worktree" "$lang" 2>/dev/null
+
     if [ "$lang" = "java" ]; then
         mkdir -p "${sol_dir}/tests"
-        cp -f "${STARTER_DIR}/java/tests/"*.java "${sol_dir}/tests/" 2>/dev/null || true
+        cp -f "${starter_worktree}/tests/"*.java "${sol_dir}/tests/" 2>/dev/null || true
     elif [ "$lang" = "python" ]; then
         mkdir -p "${sol_dir}/tests"
-        cp -f "${STARTER_DIR}/python/tests/"*.py "${sol_dir}/tests/" 2>/dev/null || true
+        cp -f "${starter_worktree}/tests/"*.py "${sol_dir}/tests/" 2>/dev/null || true
     fi
 
     for stage in "${STAGES[@]}"; do
@@ -83,6 +99,12 @@ for lang in "${LANGUAGES[@]}"; do
     done
 
     echo ""
+done
+
+# Cleanup worktrees
+for lang in "${LANGUAGES[@]}"; do
+    git -C "$SOLUTION_DIR" worktree remove --force "${SOLUTION_DIR}/.worktree-${lang}" 2>/dev/null || true
+    git -C "$STARTER_DIR" worktree remove --force "${STARTER_DIR}/.worktree-${lang}" 2>/dev/null || true
 done
 
 echo "=========================================="
